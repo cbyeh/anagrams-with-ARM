@@ -1,0 +1,186 @@
+/*
+ * Filename: README
+ * Author: Christopher Yeh
+ * Userid: cs30xfv
+ * Date: 2/27/2019
+ * Sources of help: None
+ */
+
+DESCRIPTION
+-------------------------------------------------------------------------------
+This program has two main drivers. Generate generates a file given a dictionary
+file to read into our other main driver, query.
+
+Query reads that file as its input and executes an interactive program, where 
+you can sequentially type in words, and will print out matching words from that
+dictionary file.
+
+
+HOW TO COMPILE
+-------------------------------------------------------------------------------
+Use the command: `make`
+
+
+
+HOW TO RUN
+-------------------------------------------------------------------------------
+GENERATE:
+_________
+Use the command: `./generate` to generate the .ano file.
+`./generate` will create a default anagram file from a standard dictionary with
+the filename 'anagrams.ano'
+
+Flags may be used for additional options. 
+Having the flags:
+-h will print the instructions on how to call generate. 
+-i <filename> will redirect generate to use the provided words in the 
+dictionary.
+-o <filename> likewise will create the .ano file with the provided argument.
+
+
+QUERY:
+______
+Use the command `./query <filename>` to run the query, where filename is an
+.ano file.
+
+Flags may be used for additional options.
+Having the flags:
+-h will print the instructions on how to call query. 
+-f <filename> is required to run the program. <filename> is the generated .ano
+file.
+-s <size> is an optional flag for the size of the queryTable. <size> must be a
+valid integer and in the bounds of 1-1000 inclusive.
+
+
+
+NORMAL OUTPUT
+-------------------------------------------------------------------------------
+Normal output is printed to screen.
+Example of normal output:
+
+$ ./generate -i myWords -o myWords.ano
+
+        Generated anagram file (myWords.ano) with 7 anagrams.
+
+
+$ ./generate
+
+        Generated anagram file (anagrams.ano) with 72786 anagrams.
+
+
+$ ./query -f anagrams.ano
+
+Enter a word to search for anagrams [^D to exit]: are
+
+Anagrams found:  Rae ear era
+
+Enter a word to search for anagrams [^D to exit]: ap
+
+Anagrams found:  Pa pa
+
+Enter a word to search for anagrams [^D to exit]: pa
+
+No anagrams found.
+
+Enter a word to search for anagrams [^D to exit]: aethr
+
+Anagrams found:  Earth Harte earth hater heart
+
+
+
+ANORMAL OUTPUT
+-------------------------------------------------------------------------------
+Abnormal output is printed stderr.
+Example of abnormal output:
+
+$ ./generate file
+
+        Extra argument 'file'.
+
+Usage: ./generate [-i inputWordsFile] [-o outputAnagramFile] [-h]
+Try './generate -h' for more information.
+
+
+$ ./query -f notExist.ano
+
+        Error opening input file (notExist.ano); invalid file.
+
+
+$ ./query -f notAno.txt
+
+        Anagram file must have extension ".ano".
+
+
+
+HOW I TESTED
+-------------------------------------------------------------------------------
+I used mostly vdb, looking at code line by line to debug.
+Running gdb also greatly helped finding segfault bugs, usually pointing to
+which function was exhibiting the problem.
+While failing to compile, stderr usually reported important bugs, such as 
+double freeing memory.
+
+Testing the assembly files required tests. I made sure the tests covered all
+edge cases as well as any other unusual inputs to check for side effects.
+For example, for testing countChars(), I made sure to test for null inputs,
+inputs that are over 48 characters, words that contain every letter, and words
+that contain upper and lower case letters.
+
+
+
+QUESTIONS
+-------------------------------------------------------------------------------
+Unix
+____
+1. You are trying to open your pa3Strings.h file. You have already typed 
+"vim pa3S". Which single key can you press to autocomplete the command to 
+"vim pa3Strings.h"?
+	TAB
+
+2. What is the command to search for tabs in all the C files in your current 
+directory? Your command should print out the line numbers of the tabs as well.
+	`grep -n '\t' *.c`	
+
+
+C
+_
+3. Suppose that we define the variable anagramPtr like so:
+anagram_t * anagramPtr = calloc( 5, sizeof( anagram_t ) );
+(a) What is the value of sizeof(anagramPtr) and
+	4
+(b) Why?
+	anagramPtr is a pointer to a location in memory, which is 4 bytes.
+
+4. Give two different situations in which dynamic memory allocation 
+(use of malloc/calloc/realloc) would be necessary.
+	1. We need to arbitrarily append to the end of an array based on a
+	   user's input, not knowing the maximum amount of memory we need.
+	2. To build a data structure without a fixed size.
+
+5. Rewrite the following expression such that the *, ->, and + operators are 
+not used:
+*((*((table.tablePtr + i)->dataPtr + j)).counts + k)
+        table.tablePtr[i].dataPtr[j].counts[k]
+
+Vim
+___
+6. What is the command to turn a lowercase character into an uppercase 
+character and vice versa?
+	With the cursor in between two letters:
+	`gUh` to capitalize the character left of the cursor.
+	`gUl` to capitalize the character right of the cursor.
+	`guh` to decapitalize the character left of the cursor.
+	`gul` to decapitalize the character right of the cursor.
+
+7. What is the command to repeat the last executed command?
+	`@:`
+	
+
+Academic Integrity
+__________________
+8. It’s the day that the assignment is due and your friend is really stressing 
+out. They want to copy your code. What would you tell them to convince them to 
+act with integrity?
+
+	Tell them it is not worth their academic career. Also I myself have 
+	academic integrity. So tough frick, Rick.
